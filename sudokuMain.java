@@ -52,11 +52,62 @@ public class sudokuMain
 		
 		if (options.size() == 1)
 		{
+			System.out.println("(" + row + ", " + col + "): " + options);
 			return options.get(0);
 		}
 		else
 		{
-			String possibilities = String.valueOf(options);
+			ArrayList<Integer> rowCandidates = new ArrayList<Integer>(options);
+			ArrayList<Integer> colCandidates = new ArrayList<Integer>(options);
+			ArrayList<Integer> squareCandidates = new ArrayList<Integer>(options);
+			
+			for (int j = 0; j < myArray.length; j++)
+			{
+				ArrayList<Integer> temp = new ArrayList<Integer>();
+				
+				if (myArray[row][j] == 0 && j != col)
+				{
+					temp = boxSolver(row, j, myArray);
+				}
+				
+				for (int k = 0; k < temp.size(); k++)
+				{
+					if (squareCandidates.contains(temp.get(k)))
+					{
+						squareCandidates.remove(temp.get(k));
+					}
+				}
+			}
+			
+			if (rowCandidates.size() == 1)
+			{
+				System.out.println("(" + row + ", " + col + "): " + rowCandidates);
+				return rowCandidates.get(0);
+			}
+			
+			for (int j = 0; j < myArray[col].length; j++)
+			{
+				ArrayList<Integer> temp = new ArrayList<Integer>();
+				
+				if (myArray[j][col] == 0 && j != row)
+				{
+					temp = boxSolver(j, col, myArray);
+				}
+				
+				for (int k = 0; k < temp.size(); k++)
+				{
+					if (squareCandidates.contains(temp.get(k)))
+					{
+						squareCandidates.remove(temp.get(k));
+					}
+				}
+			}
+			
+			if (colCandidates.size() == 1)
+			{
+				System.out.println("(" + row + ", " + col + "): " + colCandidates);
+				return colCandidates.get(0);
+			}
 			
 			for (int j = row/3 * 3; j < row/3 * 3 + 3; j++)
 			{
@@ -71,24 +122,22 @@ public class sudokuMain
 					
 					for (int i = 0; i < temp.size(); i++)
 					{
-						if (options.contains(temp.get(i)))
+						if (squareCandidates.contains(temp.get(i)))
 						{
-							options.remove(temp.get(i));
+							squareCandidates.remove(temp.get(i));
 						}
 					}
 				}
 			}
 			
-			if (options.size() == 1)
+			if (squareCandidates.size() == 1)
 			{
-				System.out.println("(" + row + ", " + col + "): " + options);
-				return options.get(0);
+				System.out.println("(" + row + ", " + col + "): " + squareCandidates);
+				return squareCandidates.get(0);
 			}
-			else
-			{
-				System.out.println("(" + row + ", " + col + "): " + possibilities);
-				return 0;
-			}
+			
+			System.out.println("(" + row + ", " + col + "): " + options);
+			return 0;
 		}
 	}
 	
