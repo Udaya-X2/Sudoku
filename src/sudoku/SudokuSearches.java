@@ -1,6 +1,6 @@
 package sudoku;
 
-public class sudokuSearches
+public class SudokuSearches
 {
 	public static boolean rowSearch(int row, int target, int[][] myArray)
 	{
