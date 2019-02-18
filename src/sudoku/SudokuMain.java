@@ -3,20 +3,20 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class sudokuMain
+public class SudokuMain
 {
 	public static void main(String[] args)
 	{
-		int[][] sudoku = {{1, 0, 0, 9, 2, 0, 0, 0, 0},
-						  {5, 2, 4, 0, 1, 0, 0, 0, 0},
-						  {0, 0, 0, 0, 0, 0, 0, 7, 0},
-						  {0, 5, 0, 0, 0, 8, 1, 0, 2},
-						  {0, 0, 0, 0, 0, 0, 0, 0, 0},
-						  {4, 0, 2, 7, 0, 0, 0, 9, 0},
-						  {0, 6, 0, 0, 0, 0, 0, 0, 0},
-						  {0, 0, 0, 0, 3, 0, 9, 4, 5},
-						  {0, 0, 0, 0, 7, 1, 0, 0, 6}};
-		sudoku = solveSudoku(sudoku);
+		int[][] sudoku = {{0, 0, 5, 0, 0, 0, 0, 0, 6},
+						  {0, 7, 0, 0, 0, 9, 0, 2, 0},
+						  {0, 0, 0, 5, 0, 0, 1, 0, 7},
+						  {8, 0, 4, 1, 5, 0, 0, 0, 0},
+						  {0, 0, 0, 8, 0, 3, 0, 0, 0},
+						  {0, 0, 0, 0, 9, 2, 8, 0, 5},
+						  {9, 0, 7, 0, 0, 6, 0, 0, 0},
+						  {0, 3, 0, 4, 0, 0, 0, 1, 0},
+						  {2, 0, 0, 0, 0, 0, 6, 0, 0}};
+		solveSudoku(sudoku);
 		guessAndCheck(sudoku);
 		
 		for (int i = 0; i < sudoku.length; i++)
@@ -25,34 +25,33 @@ public class sudokuMain
 		}
 	}
 	
-	public static int[][] solveSudoku(int[][] sudoku)
+	public static int[][] solveSudoku(int[][] myArray)
 	{
-		int[][] newSudoku = sudoku;
 		boolean changed = false;
 		
-		for (int j = 0; j < newSudoku.length; j++)
+		for (int j = 0; j < myArray.length; j++)
 		{
-			for (int k = 0; k < newSudoku[j].length; k++)
+			for (int k = 0; k < myArray[j].length; k++)
 			{
-				if (newSudoku[j][k] == 0)
+				if (myArray[j][k] == 0)
 				{
-					newSudoku[j][k] = getCandidate(j, k, sudoku);
+					myArray[j][k] = getCandidate(j, k, myArray);
 					
-					if (newSudoku[j][k] != 0)
+					if (myArray[j][k] != 0)
 					{
 						changed = true;
 					}
 				}	
 			}
 			
-			if (j + 1 == newSudoku.length && changed)
+			if (j + 1 == myArray.length && changed)
 			{
 				j = -1;
 				changed = false;
 			}
 		}
 		
-		return newSudoku;
+		return myArray;
 	}
 	
 	public static int getCandidate(int row, int col, int[][] myArray)
@@ -61,7 +60,7 @@ public class sudokuMain
 		
 		if (options.size() == 1)
 		{
-			System.out.println("(" + row + ", " + col + "): " + options);
+// 			System.out.println("(" + row + ", " + col + "): " + options);
 			return options.get(0);
 		}
 		else
@@ -90,7 +89,7 @@ public class sudokuMain
 			
 			if (rowCandidates.size() == 1)
 			{
-				System.out.println("(" + row + ", " + col + "): " + rowCandidates);
+// 				System.out.println("(" + row + ", " + col + "): " + rowCandidates);
 				return rowCandidates.get(0);
 			}
 			
@@ -114,7 +113,7 @@ public class sudokuMain
 			
 			if (colCandidates.size() == 1)
 			{
-				System.out.println("(" + row + ", " + col + "): " + colCandidates);
+				//System.out.println("(" + row + ", " + col + "): " + colCandidates);
 				return colCandidates.get(0);
 			}
 			
@@ -141,11 +140,11 @@ public class sudokuMain
 			
 			if (squareCandidates.size() == 1)
 			{
-				System.out.println("(" + row + ", " + col + "): " + squareCandidates);
+// 				System.out.println("(" + row + ", " + col + "): " + squareCandidates);
 				return squareCandidates.get(0);
 			}
 			
-			System.out.println("(" + row + ", " + col + "): " + options);
+// 			System.out.println("(" + row + ", " + col + "): " + options);
 			return 0;
 		}
 	}
@@ -161,15 +160,15 @@ public class sudokuMain
 		
 		for (int i = 1; i <= 9; i++)
 		{
-				if (sudokuSearches.rowSearch(row, i, myArray))
+				if (SudokuSearches.rowSearch(row, i, myArray))
 				{
 					options.remove(options.indexOf(i));
 				}
-				else if (sudokuSearches.colSearch(col, i, myArray))
+				else if (SudokuSearches.colSearch(col, i, myArray))
 				{
 					options.remove(options.indexOf(i));
 				}
-				else if (sudokuSearches.squareSearch(row, col, i, myArray))
+				else if (SudokuSearches.squareSearch(row, col, i, myArray))
 				{
 					options.remove(options.indexOf(i));
 				}
