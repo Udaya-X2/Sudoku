@@ -4,46 +4,55 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class sudokuMain
-{	
+{
 	public static void main(String[] args)
 	{
-		int[][] sudoku = {{0, 0, 3, 0, 2, 0, 6, 0, 0},
-				  {9, 0, 0, 3, 0, 5, 0, 0, 1},
-				  {0, 0, 1, 8, 0, 6, 4, 0, 0},
-				  {0, 0, 8, 1, 0, 2, 9, 0, 0},
-				  {7, 0, 0, 0, 0, 0, 0, 0, 8},
-				  {0, 0, 6, 7, 0, 8, 2, 0, 0},
-				  {0, 0, 2, 6, 0, 9, 5, 0, 0},
-				  {8, 0, 0, 2, 0, 3, 0, 0, 9},
-				  {0, 0, 5, 0, 1, 0, 3, 0, 0}};
+		int[][] sudoku = {{1, 0, 0, 9, 2, 0, 0, 0, 0},
+				  {5, 2, 4, 0, 1, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 0, 0, 0, 7, 0},
+				  {0, 5, 0, 0, 0, 8, 1, 0, 2},
+				  {0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {4, 0, 2, 7, 0, 0, 0, 9, 0},
+				  {0, 6, 0, 0, 0, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 3, 0, 9, 4, 5},
+				  {0, 0, 0, 0, 7, 1, 0, 0, 6}};
+		sudoku = solveSudoku(sudoku);
+		guessAndCheck(sudoku);
+		
+		for (int i = 0; i < sudoku.length; i++)
+		{
+			System.out.println(Arrays.toString(sudoku[i]));
+		}
+	}
+	
+	public static int[][] solveSudoku(int[][] sudoku)
+	{
+		int[][] newSudoku = sudoku;
 		boolean changed = false;
 		
-		for (int j = 0; j < sudoku.length; j++)
+		for (int j = 0; j < newSudoku.length; j++)
 		{
-			for (int k = 0; k < sudoku[j].length; k++)
+			for (int k = 0; k < newSudoku[j].length; k++)
 			{
-				if (sudoku[j][k] == 0)
+				if (newSudoku[j][k] == 0)
 				{
-					sudoku[j][k] = getCandidate(j, k, sudoku);
+					newSudoku[j][k] = getCandidate(j, k, sudoku);
 					
-					if (sudoku[j][k] != 0)
+					if (newSudoku[j][k] != 0)
 					{
 						changed = true;
 					}
 				}	
 			}
 			
-			if (j + 1 == sudoku.length && changed)
+			if (j + 1 == newSudoku.length && changed)
 			{
 				j = -1;
 				changed = false;
 			}
 		}
 		
-		for (int i = 0; i < sudoku.length; i++)
-		{
-			System.out.println(Arrays.toString(sudoku[i]));
-		}
+		return newSudoku;
 	}
 	
 	public static int getCandidate(int row, int col, int[][] myArray)
@@ -166,8 +175,38 @@ public class sudokuMain
 				}
 		}
 		
-		System.out.println("(" + row + ", " + col + "): " + options);
-		
 		return options;
+	}
+	
+	public static boolean guessAndCheck(int[][] myArray)
+	{
+		for (int j = 0; j < myArray.length; j++)
+		{
+			for (int k = 0; k < myArray[j].length; k++)
+			{
+				if (myArray[j][k] == 0)
+				{
+					ArrayList<Integer> options = boxSolver(j, k, myArray);
+					
+					for (int i = 0; i < options.size(); i++)
+					{
+						myArray[j][k] = options.get(i);
+						
+						if (guessAndCheck(myArray))
+						{
+							return true;
+						}
+						else
+						{
+							myArray[j][k] = 0;
+						}
+					}
+					
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 }
