@@ -7,25 +7,31 @@ public class SudokuMain
 {
 	public static void main(String[] args)
 	{
-		int[][] sudoku = {{0, 0, 5, 0, 0, 0, 0, 0, 6},
-						  {0, 7, 0, 0, 0, 9, 0, 2, 0},
-						  {0, 0, 0, 5, 0, 0, 1, 0, 7},
-						  {8, 0, 4, 1, 5, 0, 0, 0, 0},
-						  {0, 0, 0, 8, 0, 3, 0, 0, 0},
-						  {0, 0, 0, 0, 9, 2, 8, 0, 5},
-						  {9, 0, 7, 0, 0, 6, 0, 0, 0},
-						  {0, 3, 0, 4, 0, 0, 0, 1, 0},
-						  {2, 0, 0, 0, 0, 0, 6, 0, 0}};
+		int[][] sudoku = {{5, 0, 0, 0, 9, 0, 6, 0, 0},
+						  {0, 4, 0, 0, 1, 0, 0, 0, 3},
+						  {0, 0, 7, 8, 0, 0, 0, 0, 2},
+						  {0, 9, 0, 3, 2, 0, 0, 6, 0},
+						  {0, 3, 0, 1, 0, 4, 0, 5, 0},
+						  {0, 7, 0, 0, 5, 9, 0, 3, 0},
+						  {7, 0, 0, 0, 0, 2, 1, 0, 0},
+						  {2, 0, 0, 0, 6, 0, 0, 7, 0},
+						  {0, 0, 1, 0, 8, 0, 0, 0, 6}};
 		solveSudoku(sudoku);
-		guessAndCheck(sudoku);
 		
-		for (int i = 0; i < sudoku.length; i++)
+		if (guessAndCheck(sudoku))
+		{	
+			for (int i = 0; i < sudoku.length; i++)
+			{
+				System.out.println(Arrays.toString(sudoku[i]));
+			}
+		}
+		else
 		{
-			System.out.println(Arrays.toString(sudoku[i]));
+			System.out.println("This Sudoku is unsolvable.");
 		}
 	}
 	
-	public static int[][] solveSudoku(int[][] myArray)
+	public static void solveSudoku(int[][] myArray)
 	{
 		boolean changed = false;
 		
@@ -50,8 +56,6 @@ public class SudokuMain
 				changed = false;
 			}
 		}
-		
-		return myArray;
 	}
 	
 	public static int getCandidate(int row, int col, int[][] myArray)
@@ -60,7 +64,7 @@ public class SudokuMain
 		
 		if (options.size() == 1)
 		{
-// 			System.out.println("(" + row + ", " + col + "): " + options);
+//			System.out.println("(" + row + ", " + col + "): " + options);
 			return options.get(0);
 		}
 		else
@@ -69,7 +73,7 @@ public class SudokuMain
 			ArrayList<Integer> colCandidates = new ArrayList<Integer>(options);
 			ArrayList<Integer> squareCandidates = new ArrayList<Integer>(options);
 			
-			for (int j = 0; j < myArray.length; j++)
+			for (int j = 0; j < myArray[row].length; j++)
 			{
 				ArrayList<Integer> temp = new ArrayList<Integer>();
 				
@@ -80,20 +84,20 @@ public class SudokuMain
 				
 				for (int k = 0; k < temp.size(); k++)
 				{
-					if (squareCandidates.contains(temp.get(k)))
+					if (rowCandidates.contains(temp.get(k)))
 					{
-						squareCandidates.remove(temp.get(k));
+						rowCandidates.remove(temp.get(k));
 					}
 				}
 			}
 			
 			if (rowCandidates.size() == 1)
 			{
-// 				System.out.println("(" + row + ", " + col + "): " + rowCandidates);
+//				System.out.println("(" + row + ", " + col + "): " + rowCandidates);
 				return rowCandidates.get(0);
 			}
 			
-			for (int j = 0; j < myArray[col].length; j++)
+			for (int j = 0; j < myArray.length; j++)
 			{
 				ArrayList<Integer> temp = new ArrayList<Integer>();
 				
@@ -104,16 +108,16 @@ public class SudokuMain
 				
 				for (int k = 0; k < temp.size(); k++)
 				{
-					if (squareCandidates.contains(temp.get(k)))
+					if (colCandidates.contains(temp.get(k)))
 					{
-						squareCandidates.remove(temp.get(k));
+						colCandidates.remove(temp.get(k));
 					}
 				}
 			}
 			
 			if (colCandidates.size() == 1)
 			{
-				//System.out.println("(" + row + ", " + col + "): " + colCandidates);
+//				System.out.println("(" + row + ", " + col + "): " + colCandidates);
 				return colCandidates.get(0);
 			}
 			
@@ -140,11 +144,11 @@ public class SudokuMain
 			
 			if (squareCandidates.size() == 1)
 			{
-// 				System.out.println("(" + row + ", " + col + "): " + squareCandidates);
+//				System.out.println("(" + row + ", " + col + "): " + squareCandidates);
 				return squareCandidates.get(0);
 			}
 			
-// 			System.out.println("(" + row + ", " + col + "): " + options);
+//			System.out.println("(" + row + ", " + col + "): " + options);
 			return 0;
 		}
 	}
